@@ -1,0 +1,27 @@
+{
+  "name": "stormwater-graphql-research-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "lint": "node_modules/.bin/eslint --color -c .eslintrc — ext .js src",
+    "dev-server": "node_modules/.bin/nodemon ./src/server.js",
+    "watch:lint": "node node_modules/eslint-watch/bin/esw -w",
+    "start": "node_modules/.bin/concurrently --kill-others --raw \"npm run watch:lint\" \"npm run dev-server\"",
+    "prod-server": "node src/server.js"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "compression": "1.7.3",
+    "concurrently": "4.0.1",
+    "cors": "2.8.4",
+    "eslint": "5.6.0",
+    "eslint-config-airbnb-base": "13.1.0",
+    "eslint-plugin-import": "2.14.0",
+    "eslint-watch": "4.0.2",
+    "express": "4.16.3",
+    "helmet": "3.13.0",
+    "morgan": "1.9.1",
+    "nodemon": "1.18.4"
+  }
+}
