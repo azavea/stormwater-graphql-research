@@ -4,6 +4,9 @@ const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+const expressGraphQL = require('express-graphql');
+
+const schema = require('./schema/schema');
 
 const app = express();
 const PORT = 9991;
@@ -14,7 +17,12 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-app.get('*', (req, res) => {
+app.use('/graphql', expressGraphQL({
+    schema,
+    graphiql: true,
+}));
+
+app.get('/hello', (req, res) => {
     res.end('hello world');
 });
 

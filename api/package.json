@@ -11,6 +11,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "axios": "0.18.0",
     "body-parser": "1.18.3",
     "compression": "1.7.3",
     "concurrently": "4.0.1",
@@ -20,8 +21,11 @@
     "eslint-plugin-import": "2.14.0",
     "eslint-watch": "4.0.2",
     "express": "4.16.3",
+    "express-graphql": "0.6.12",
+    "graphql": "0.13.2",
     "helmet": "3.13.0",
     "morgan": "1.9.1",
-    "nodemon": "1.18.4"
+    "nodemon": "1.18.4",
+    "ramda": "0.25.0"
   }
 }

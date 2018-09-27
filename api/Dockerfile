@@ -4,7 +4,7 @@ WORKDIR /usr/src/api
 
 COPY package*.json ./
 
-RUN npm install --quiet
+RUN npm install --quiet --no-optional
 
 COPY . .
 
