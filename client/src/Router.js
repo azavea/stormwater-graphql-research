@@ -7,8 +7,8 @@ import { enumCreator } from './utils';
 import Screen from './components/Screen';
 
 const screensEnum = (() => {
-    const { First, Second, Third, Fourth } = enumCreator;
-    return { First, Second, Third, Fourth };
+    const { First } = enumCreator;
+    return { First };
 })();
 
 const screens = Object
@@ -22,9 +22,6 @@ const screens = Object
 
 const iconNames = {
     [screensEnum.First]: 'md-create',
-    [screensEnum.Second]: 'ios-tennisball',
-    [screensEnum.Third]: 'ios-stats',
-    [screensEnum.Fourth]: 'ios-snow',
 };
 
 export default createBottomTabNavigator(

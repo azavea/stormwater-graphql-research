@@ -1,10 +1,42 @@
 import React from 'react';
-import { string } from 'prop-types';
-import { Text, View } from 'react-native';
+import { object } from 'prop-types';
+import { Text, View, ActivityIndicator } from 'react-native';
+import { graphql } from 'react-apollo';
 
-export default function Screen({
-    title,
+import query from '../queries';
+
+function Screen({
+    data: {
+        loading,
+        error,
+        hello,
+    },
 }) {
+    const insetComponent = (() => {
+        if (loading) {
+            return (
+                <ActivityIndicator
+                    size="large"
+                    color="#0000ff"
+                />
+            );
+        }
+
+        if (error) {
+            return (
+                <Text>
+                    Error!
+                </Text>
+            );
+        }
+
+        return (
+            <Text>
+                {hello}
+            </Text>
+        );
+    })();
+
     return (
         <View
             style={{
@@ -14,17 +46,13 @@ export default function Screen({
                 alignItems: 'center',
             }}
         >
-            <Text>
-                {title}
-            </Text>
+            {insetComponent}
         </View>
     );
 }
 
-Screen.defaultProps = {
-    title: 'Screen',
+Screen.propTypes = {
+    data: object.isRequired, // eslint-disable-line react/forbid-prop-types
 };
 
-Screen.propTypes = {
-    title: string,
-};
+export default graphql(query)(Screen);
