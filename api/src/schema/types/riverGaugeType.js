@@ -185,71 +185,24 @@ function getSiteReadingFromTimeSeriesData(data, reading) {
 }
 
 const getOrNullValue = f => R.tryCatch(f, () => nullReading);
-
-const getTemperature = getOrNullValue(R.partialRight(
+const tryGetSiteReading = variable => getOrNullValue(R.partialRight(
     getSiteReadingFromTimeSeriesData,
-    [TEMPERATURE_DESCRIPTION],
+    [variable],
 ));
 
-const getPrecipitation = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [PRECIPITATION_DESCRIPTION],
-));
-
-const getDischarge = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [DISCHARGE_DESCRIPTION],
-));
-
-const getConductance = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [CONDUCTANCE_DESCRIPTION],
-));
-
-const getOxygenValue = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [OXYGEN_VALUE_DESCRIPTION],
-));
-
-const getOxygenPercentage = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [OXYGEN_PERCENTAGE_DESCRIPTION],
-));
-
-const getPH = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [PH_DESCRIPTION],
-));
-
-const getTurbidity = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [TURBIDITY_DESCRIPTION],
-));
-
-const getPressure = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [PRESSURE_DESCRIPTION],
-));
-
-const getRadiation = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [RADIATION_DESCRIPTION],
-));
-
-const getGageHeight = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [GAGE_HEIGHT_DESCRIPTION],
-));
-
-const getDepth = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [DEPTH_DESCRIPTION],
-));
-
-const getFluorescence = getOrNullValue(R.partialRight(
-    getSiteReadingFromTimeSeriesData,
-    [FLUORESCENCE_DESCRIPTION],
-));
+const getTemperature = tryGetSiteReading(TEMPERATURE_DESCRIPTION);
+const getPrecipitation = tryGetSiteReading(PRECIPITATION_DESCRIPTION);
+const getDischarge = tryGetSiteReading(DISCHARGE_DESCRIPTION);
+const getConductance = tryGetSiteReading(CONDUCTANCE_DESCRIPTION);
+const getOxygenValue = tryGetSiteReading(OXYGEN_VALUE_DESCRIPTION);
+const getOxygenPercentage = tryGetSiteReading(OXYGEN_PERCENTAGE_DESCRIPTION);
+const getPH = tryGetSiteReading(PH_DESCRIPTION);
+const getTurbidity = tryGetSiteReading(TURBIDITY_DESCRIPTION);
+const getPressure = tryGetSiteReading(PRESSURE_DESCRIPTION);
+const getRadiation = tryGetSiteReading(RADIATION_DESCRIPTION);
+const getGageHeight = tryGetSiteReading(GAGE_HEIGHT_DESCRIPTION);
+const getFluorescence = tryGetSiteReading(FLUORESCENCE_DESCRIPTION);
+const getDepth = tryGetSiteReading(DEPTH_DESCRIPTION);
 
 async function resolveRiverGaugeData(id) {
     if (!id || id.length < 8 || !phlSensorSites.includes(id)) {
