@@ -6,6 +6,11 @@ const {
     GraphQLSchema,
 } = graphql;
 
+const {
+    RiverGaugeType,
+    resolveRiverGaugeData,
+} = require('./types/riverGaugeType');
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -13,6 +18,18 @@ const RootQuery = new GraphQLObjectType({
             type: GraphQLString,
             resolve() {
                 return 'Hello world';
+            },
+        },
+        gauge: {
+            type: RiverGaugeType,
+            description: 'USGS River Gauge sensor data',
+            args: {
+                id: {
+                    type: GraphQLString,
+                },
+            },
+            resolve(_, { id }) {
+                return resolveRiverGaugeData(id);
             },
         },
     },
