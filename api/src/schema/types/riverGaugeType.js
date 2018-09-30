@@ -1,11 +1,12 @@
 const axios = require('axios');
 const R = require('ramda');
 const graphql = require('graphql');
+const turf = require('@turf/turf');
 
 const { PointLocationType } = require('./geometryTypes');
 
 const {
-    sites: phlSensorSites,
+    sites,
     variables: {
         TEMPERATURE_DESCRIPTION,
         DISCHARGE_DESCRIPTION,
@@ -22,6 +23,12 @@ const {
         DEPTH_DESCRIPTION,
     },
 } = require('./phlSensors');
+
+const sensorsFeatureCollection = turf.featureCollection(
+    sites.map(({ geom, id }) => turf.point([geom.longitude, geom.latitude], { id })),
+);
+
+const phlSensorSites = sites.map(({ id }) => id);
 
 const {
     GraphQLObjectType,
@@ -239,7 +246,21 @@ async function resolveRiverGaugeData(id) {
     };
 }
 
+async function resolveNearestRiverGaugeData(lat, lng) {
+    const {
+        properties: {
+            id,
+        },
+    } = turf.nearestPoint(
+        turf.point([lng, lat]),
+        sensorsFeatureCollection,
+    );
+
+    return resolveRiverGaugeData(id);
+}
+
 module.exports = {
     RiverGaugeType,
     resolveRiverGaugeData,
+    resolveNearestRiverGaugeData,
 };

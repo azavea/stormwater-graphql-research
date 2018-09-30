@@ -4,11 +4,13 @@ const {
     GraphQLObjectType,
     GraphQLString,
     GraphQLSchema,
+    GraphQLFloat,
 } = graphql;
 
 const {
     RiverGaugeType,
     resolveRiverGaugeData,
+    resolveNearestRiverGaugeData,
 } = require('./types/riverGaugeType');
 
 const RootQuery = new GraphQLObjectType({
@@ -27,9 +29,23 @@ const RootQuery = new GraphQLObjectType({
                 id: {
                     type: GraphQLString,
                 },
+                lat: {
+                    type: GraphQLFloat,
+                },
+                lng: {
+                    type: GraphQLFloat,
+                },
             },
-            resolve(_, { id }) {
-                return resolveRiverGaugeData(id);
+            resolve(_, { id, lat, lng }) {
+                if (id) {
+                    return resolveRiverGaugeData(id);
+                }
+
+                if (lat && lng) {
+                    return resolveNearestRiverGaugeData(lat, lng);
+                }
+
+                return null;
             },
         },
     },
