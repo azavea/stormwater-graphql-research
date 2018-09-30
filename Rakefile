@@ -12,17 +12,12 @@ end
 
 desc "Start GraphQL server"
 task :server do
-  trap("SIGINT") { puts "Stopping GraphQL server ->" }
   puts "Starting GraphQL server ->"
   sh "docker-compose up"
 end
 
 desc "Launch React Native client"
 task :client do
-  trap("SIGINT") {
-    puts "Stopping React Native client ->"
-    sh "stty echo"
-  }
   puts "Launching React Native client ->"
   Dir.chdir("client") do
     system("npm start")
