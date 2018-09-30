@@ -22,12 +22,15 @@ const RootQuery = new GraphQLObjectType({
             args: {
                 id: {
                     type: GraphQLString,
+                    description: 'ID of a river gauge sensor in Philadelphia',
                 },
                 lat: {
                     type: GraphQLFloat,
+                    description: 'Latitude for a point',
                 },
                 lng: {
                     type: GraphQLFloat,
+                    description: 'Longitude for a point',
                 },
             },
             resolve(_, { id, lat, lng }) {
