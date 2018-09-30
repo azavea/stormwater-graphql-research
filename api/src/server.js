@@ -22,8 +22,8 @@ app.use('/graphql', expressGraphQL({
     graphiql: true,
 }));
 
-app.get('/hello', (req, res) => {
-    res.end('hello world');
+app.get('*', (req, res) => {
+    res.end('Use /graphql route');
 });
 
 app.listen(PORT, () => {

@@ -16,12 +16,6 @@ const {
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
-        hello: {
-            type: GraphQLString,
-            resolve() {
-                return 'Hello world';
-            },
-        },
         gauge: {
             type: RiverGaugeType,
             description: 'USGS River Gauge sensor data',
