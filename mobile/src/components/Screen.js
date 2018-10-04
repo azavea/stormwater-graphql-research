@@ -9,7 +9,7 @@ function Screen({
     data: {
         loading,
         error,
-        hello,
+        gauge,
     },
 }) {
     const insetComponent = (() => {
@@ -22,7 +22,7 @@ function Screen({
             );
         }
 
-        if (error) {
+        if (error || !gauge) {
             return (
                 <Text>
                     Error!
@@ -30,10 +30,30 @@ function Screen({
             );
         }
 
+        const {
+            id,
+            siteName,
+            temperature: {
+                reading,
+                timestamp,
+            },
+        } = gauge;
+
         return (
-            <Text>
-                {hello}
-            </Text>
+            <View>
+                <Text>
+                    Site: {siteName}
+                </Text>
+                <Text>
+                    ID: {id}
+                </Text>
+                <Text>
+                    Temperature: {reading}
+                </Text>
+                <Text>
+                    Timestamp: {timestamp}
+                </Text>
+            </View>
         );
     })();
 
