@@ -4,7 +4,7 @@ desc "Build project"
 task :build do
   puts "Building GraphQL server container ->"
   sh "docker-compose build"
-  Dir.chdir("client") do
+  Dir.chdir("mobile") do
     puts "Installing React Native client dependencies ->"
     sh "npm install"
   end
@@ -17,9 +17,9 @@ task :server do
 end
 
 desc "Launch React Native client"
-task :client do
+task :mobile do
   puts "Launching React Native client ->"
-  Dir.chdir("client") do
+  Dir.chdir("mobile") do
     system("npm start")
   end
 end

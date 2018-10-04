@@ -22,19 +22,19 @@ rake build
 rake server
 ```
 
-## Client
+## Mobile Client
 
 ```
-rake client
+rake mobile
 ```
 
-## Tasks
+## Rake Tasks
 
 | Task | Description |
 | ---- | ----------- |
 | build | Create GraphQL service & install client dependencies |
 | server | Start GraphQL server |
-| client | Start React Native app using Expo |
+| mobile | Start React Native app using Expo |
 
 ## License
 
