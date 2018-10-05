@@ -9,5 +9,7 @@ services:
       - /usr/src/api/node_modules
     ports:
       - "9991:9991"
+    env_file:
+      - server.env
     tty: true
     command: npm start
