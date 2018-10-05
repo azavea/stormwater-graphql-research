@@ -13,6 +13,11 @@ const {
     resolveNearestRiverGaugeData,
 } = require('./types/riverGaugeType');
 
+const {
+    RWDWatershedType,
+    resolveRWDWatershed,
+} = require('./types/rwdWatershedType');
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -43,6 +48,27 @@ const RootQuery = new GraphQLObjectType({
                 }
 
                 return null;
+            },
+        },
+        rwd: {
+            type: RWDWatershedType,
+            description: 'Rapid Watershed Delineation produced watershed data',
+            args: {
+                lat: {
+                    type: GraphQLFloat,
+                    description: 'Latitude for a point',
+                },
+                lng: {
+                    type: GraphQLFloat,
+                    description: 'Longitude for a point',
+                },
+            },
+            resolve(_, { lat, lng }) {
+                if (!lat || !lng) {
+                    return null;
+                }
+
+                return resolveRWDWatershed(lat, lng);
             },
         },
     },
