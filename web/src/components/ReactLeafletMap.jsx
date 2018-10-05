@@ -1,5 +1,9 @@
 import React from 'react';
+import { object } from 'prop-types';
 import { Map, TileLayer } from 'react-leaflet';
+import { graphql } from 'react-apollo';
+
+import fetchRWDAndRiverGauge from '../queries';
 
 import {
     basemapTilesUrl,
@@ -9,7 +13,17 @@ import {
     initialMapZoom,
 } from '../constants';
 
-export default function ReactLeafletMap() {
+function ReactLeafletMap({
+    data: {
+        loading,
+        rwd,
+        gauge,
+    },
+}) {
+    window.console.log('loading ->', loading);
+    window.console.log('rwd -> ', rwd);
+    window.console.log('gauge ->', gauge);
+
     const currentBaseMap = (
         <TileLayer
             url={basemapTilesUrl}
@@ -27,3 +41,20 @@ export default function ReactLeafletMap() {
         </Map>
     );
 }
+
+ReactLeafletMap.defaultProps = {
+    data: {},
+};
+
+ReactLeafletMap.propTypes = {
+    data: object, // eslint-disable-line react/forbid-prop-types
+};
+
+export default graphql(fetchRWDAndRiverGauge, {
+    options: () => ({
+        variables: {
+            lat: 39.67185,
+            lng: -75.7674262,
+        },
+    }),
+})(ReactLeafletMap);

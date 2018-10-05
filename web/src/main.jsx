@@ -14,7 +14,7 @@ import registerServiceWorker from './registerServiceWorker';
 import Home from './components/Home';
 
 const client = new ApolloClient({
-    uri: 'api',
+    uri: 'http://localhost:9991/',
 });
 
 export default function App() {
