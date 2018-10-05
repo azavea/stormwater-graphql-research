@@ -22,6 +22,12 @@ rake build
 rake server
 ```
 
+## Web Client
+
+```
+rake web
+```
+
 ## Mobile Client
 
 ```
@@ -35,6 +41,8 @@ rake mobile
 | build | Create GraphQL service & install client dependencies |
 | server | Start GraphQL server |
 | mobile | Start React Native app using Expo |
+| web | Start React web app using Webpack Dev Server |
+| start | Start both GraphQL server and React web app |
 
 ## License
 

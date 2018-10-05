@@ -1,0 +1,13 @@
+.leaflet-container {
+    height: 100%;
+    width: inherit;
+}
+
+#react-leaflet-map {
+    height: 100vh;
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+}
+
