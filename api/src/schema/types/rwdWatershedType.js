@@ -62,9 +62,7 @@ async function pollRWDResultURL(jobID) {
     const { data } = await axios
         .get(
             makeRWDJobResultURL(jobID),
-            {
-                ...axiosOptions,
-            },
+            axiosOptions,
         );
 
     return data.status === 'started'
@@ -81,9 +79,7 @@ async function retrieveRWDResult(lat, lng) {
         .post(
             makeRWDRequestURL(),
             createRWDLocationObject(lat, lng),
-            {
-                ...axiosOptions,
-            },
+            axiosOptions,
         );
 
     const {
