@@ -17,14 +17,10 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
 
-app.use('/graphql', expressGraphQL({
+app.use('*', expressGraphQL({
     schema,
     graphiql: true,
 }));
-
-app.get('*', (req, res) => {
-    res.end('Use /graphql route');
-});
 
 app.listen(PORT, () => {
     console.log(`listening on ${PORT}`);
