@@ -13,3 +13,5 @@ services:
       - server.env
     tty: true
     command: npm start
+  redis-server:
+    image: redis
