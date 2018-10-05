@@ -2,7 +2,8 @@ const graphql = require('graphql');
 const axios = require('axios');
 
 const {
-    PointLocationType,
+    RWDPointType,
+    RWDPolygonType,
 } = require('./geometryTypes');
 
 const {
@@ -19,12 +20,12 @@ const RWDWatershedType = new GraphQLObjectType({
     name: 'RWDWatershedType',
     fields: {
         inputPoint: {
-            type: PointLocationType,
-            description: 'Original clicked point',
+            type: RWDPointType,
+            description: 'Original clicked point GeoJSON',
         },
-        outputPoint: {
-            type: PointLocationType,
-            description: 'Watershed drainage outlet point',
+        watershed: {
+            type: RWDPolygonType,
+            description: 'RWD-generated watershed GeoJSON polygon',
         },
     },
 });
@@ -79,24 +80,13 @@ async function resolveRWDWatershed(lat, lng) {
     const {
         result: {
             watershed,
-            input_pt, // eslint-disable-line camelcase
+            input_pt: inputPoint,
         },
     } = await pollRWDResultURL(job);
 
-    console.log(watershed);
-    console.log(input_pt);
-
     return {
-        inputPoint: {
-            srs: null,
-            lat,
-            lng,
-        },
-        outputPoint: {
-            srs: null,
-            lat,
-            lng,
-        },
+        inputPoint,
+        watershed,
     };
 }
 
