@@ -35,7 +35,24 @@ const {
     GraphQLString,
     GraphQLID,
     GraphQLFloat,
+    GraphQLList,
 } = graphql;
+
+const variableMappings = {
+    [TEMPERATURE_DESCRIPTION]: 'temperature',
+    [DISCHARGE_DESCRIPTION]: 'discharge',
+    [GAGE_HEIGHT_DESCRIPTION]: 'gageHeight',
+    [CONDUCTANCE_DESCRIPTION]: 'conductance',
+    [OXYGEN_VALUE_DESCRIPTION]: 'oxygenValue',
+    [OXYGEN_PERCENTAGE_DESCRIPTION]: 'oxygenPercentage',
+    [PH_DESCRIPTION]: 'ph',
+    [TURBIDITY_DESCRIPTION]: 'turbidity',
+    [PRESSURE_DESCRIPTION]: 'pressure',
+    [RADIATION_DESCRIPTION]: 'radiation',
+    [FLUORESCENCE_DESCRIPTION]: 'fluorescence',
+    [PRECIPITATION_DESCRIPTION]: 'precipitation',
+    [DEPTH_DESCRIPTION]: 'depth',
+};
 
 const RiverGaugeReadingType = new GraphQLObjectType({
     name: 'RiverGaugeReadingType',
@@ -51,6 +68,16 @@ const RiverGaugeReadingType = new GraphQLObjectType({
     },
 });
 
+const riverGageReadingVariables = Object
+    .entries(variableMappings)
+    .reduce((acc, [description, queryParam]) => ({
+        ...acc,
+        [queryParam]: {
+            type: RiverGaugeReadingType,
+            description,
+        },
+    }), {});
+
 const RiverGaugeType = new GraphQLObjectType({
     name: 'RiverGaugeType',
     fields: {
@@ -62,62 +89,19 @@ const RiverGaugeType = new GraphQLObjectType({
             type: GraphQLString,
             description: 'River gauge site name',
         },
+        url: {
+            type: GraphQLString,
+            description: 'URL for river gauge website',
+        },
         location: {
             type: PointLocationType,
             description: 'River gauge point geometry',
         },
-        temperature: {
-            type: RiverGaugeReadingType,
-            description: TEMPERATURE_DESCRIPTION,
+        variables: {
+            type: new GraphQLList(GraphQLString),
+            description: 'Available variables for river gauge sensor readings',
         },
-        precipitation: {
-            type: RiverGaugeReadingType,
-            description: PRECIPITATION_DESCRIPTION,
-        },
-        discharge: {
-            type: RiverGaugeReadingType,
-            description: DISCHARGE_DESCRIPTION,
-        },
-        conductance: {
-            type: RiverGaugeReadingType,
-            description: CONDUCTANCE_DESCRIPTION,
-        },
-        oxygenValue: {
-            type: RiverGaugeReadingType,
-            description: OXYGEN_VALUE_DESCRIPTION,
-        },
-        oxygenPercentage: {
-            type: RiverGaugeReadingType,
-            description: OXYGEN_PERCENTAGE_DESCRIPTION,
-        },
-        ph: {
-            type: RiverGaugeReadingType,
-            description: PH_DESCRIPTION,
-        },
-        turbidity: {
-            type: RiverGaugeReadingType,
-            description: TURBIDITY_DESCRIPTION,
-        },
-        pressure: {
-            type: RiverGaugeReadingType,
-            description: PRESSURE_DESCRIPTION,
-        },
-        radiation: {
-            type: RiverGaugeReadingType,
-            description: RADIATION_DESCRIPTION,
-        },
-        flourescence: {
-            type: RiverGaugeReadingType,
-            description: FLUORESCENCE_DESCRIPTION,
-        },
-        gageHeight: {
-            type: RiverGaugeReadingType,
-            description: GAGE_HEIGHT_DESCRIPTION,
-        },
-        depth: {
-            type: RiverGaugeReadingType,
-            description: DEPTH_DESCRIPTION,
-        },
+        ...riverGageReadingVariables,
     },
 });
 
@@ -153,6 +137,15 @@ function getSiteLocationFromTimeSeriesData([
         lat: latitude,
         lng: longitude,
     };
+}
+
+function getAvailableVariablesFromTimeSeriesData(data) {
+    return data
+        .map(({
+            variable: {
+                variableDescription,
+            },
+        }) => variableMappings[variableDescription] || variableDescription);
 }
 
 const nullReading = {
@@ -229,6 +222,8 @@ async function resolveRiverGaugeData(id) {
     return {
         id,
         siteName: getSiteNameFromTimeSeriesData(data),
+        url: `https://waterdata.usgs.gov/usa/nwis/uv?${id}`,
+        variables: getAvailableVariablesFromTimeSeriesData(data),
         location: getSiteLocationFromTimeSeriesData(data),
         temperature: getTemperature(data),
         precipitation: getPrecipitation(data),
