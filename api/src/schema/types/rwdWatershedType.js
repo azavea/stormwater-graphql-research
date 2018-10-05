@@ -1,5 +1,14 @@
+const { promisify } = require('util');
 const graphql = require('graphql');
 const axios = require('axios');
+const redis = require('redis');
+
+const redisClient = redis.createClient({
+    host: 'redis-server',
+});
+
+const redisClientGet = promisify(redisClient.get)
+    .bind(redisClient);
 
 const {
     RWDPointType,
@@ -63,7 +72,7 @@ async function pollRWDResultURL(jobID) {
         : data;
 }
 
-async function resolveRWDWatershed(lat, lng) {
+async function retrieveRWDResult(lat, lng) {
     const {
         data: {
             job,
@@ -88,6 +97,21 @@ async function resolveRWDWatershed(lat, lng) {
         inputPoint,
         watershed,
     };
+}
+
+async function resolveRWDWatershed(lat, lng) {
+    const cacheKey = `${lat}${lng}`;
+    const cacheReponse = await redisClientGet(cacheKey);
+
+    if (cacheReponse) {
+        return JSON.parse(cacheReponse);
+    }
+
+    const rwdResult = await retrieveRWDResult(lat, lng);
+
+    redisClient.set(cacheKey, JSON.stringify(rwdResult));
+
+    return rwdResult;
 }
 
 module.exports = {
