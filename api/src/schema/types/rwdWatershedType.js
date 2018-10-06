@@ -19,12 +19,6 @@ const {
     GraphQLObjectType,
 } = graphql;
 
-const axiosOptions = {
-    headers: {
-        Authorization: `Token ${process.env.RWD_API_KEY}`,
-    },
-};
-
 const RWDWatershedType = new GraphQLObjectType({
     name: 'RWDWatershedType',
     fields: {
@@ -50,20 +44,80 @@ function createRWDLocationObject(lat, lng) {
     };
 }
 
-function makeRWDRequestURL() {
-    return `${process.env.RWD_API_URL}/watershed/`;
+async function getRWDURLAndToken() {
+    return axios
+        .post(
+            process.env.RWD_AUTH_URL,
+            {
+                token: process.env.RWD_AUTH_TOKEN,
+            },
+        );
 }
 
-function makeRWDJobResultURL(jobID) {
-    return `${process.env.RWD_API_URL}/jobs/${jobID}/`;
+function createAxiosOptions(key) {
+    return {
+        headers: {
+            Authorization: `Token ${key}`,
+        },
+    };
+}
+
+const rwdURLCacheKey = 'RWD_AUTH_URL';
+const rwdAuthCacheKey = 'RWD_AUTH_KEY';
+
+async function createRWDAuthHeader() {
+    const cachedRWDAuthKey = await redisClientGet(rwdAuthCacheKey);
+
+    if (cachedRWDAuthKey) {
+        return createAxiosOptions(cachedRWDAuthKey);
+    }
+
+    const {
+        data: {
+            key,
+            url,
+        },
+    } = await getRWDURLAndToken();
+
+    redisClient.set(rwdAuthCacheKey, key);
+    redisClient.set(rwdURLCacheKey, url);
+
+    return createAxiosOptions(key);
+}
+
+async function createRWDBaseURL() {
+    const cachedRWDBaseURL = await redisClientGet('RWD_AUTH_URL');
+
+    if (cachedRWDBaseURL) {
+        return cachedRWDBaseURL;
+    }
+
+    const {
+        data: {
+            key,
+            url,
+        },
+    } = await getRWDURLAndToken();
+
+    redisClient.set(rwdAuthCacheKey, key);
+    redisClient.set(rwdURLCacheKey, url);
+
+    return url;
+}
+
+async function makeRWDRequestURL() {
+    return `${await createRWDBaseURL()}/watershed/`;
+}
+
+async function makeRWDJobResultURL(jobID) {
+    return `${await createRWDBaseURL()}/jobs/${jobID}/`;
 }
 
 async function pollRWDResultURL(jobID) {
-    const { data } = await axios
-        .get(
-            makeRWDJobResultURL(jobID),
-            axiosOptions,
-        );
+    const resultURL = await makeRWDJobResultURL(jobID);
+    const rwdAuthHeader = await createRWDAuthHeader();
+
+    const { data } = await axios.get(resultURL, rwdAuthHeader);
 
     return data.status === 'started'
         ? pollRWDResultURL(jobID)
@@ -71,15 +125,18 @@ async function pollRWDResultURL(jobID) {
 }
 
 async function retrieveRWDResult(lat, lng) {
+    const requestURL = await makeRWDRequestURL();
+    const rwdAuthHeader = await createRWDAuthHeader();
+
     const {
         data: {
             job,
         },
     } = await axios
         .post(
-            makeRWDRequestURL(),
+            requestURL,
             createRWDLocationObject(lat, lng),
-            axiosOptions,
+            rwdAuthHeader,
         );
 
     const {
@@ -95,7 +152,16 @@ async function retrieveRWDResult(lat, lng) {
     };
 }
 
-async function resolveRWDWatershed(lat, lng) {
+function roundCoordinate(coord) {
+    return Number
+        .parseFloat(coord)
+        .toPrecision(8);
+}
+
+async function resolveRWDWatershed(inputLat, inputLng) {
+    const lat = roundCoordinate(inputLat);
+    const lng = roundCoordinate(inputLng);
+
     const cacheKey = `${lat}${lng}`;
     const cacheReponse = await redisClientGet(cacheKey);
 
