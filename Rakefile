@@ -13,7 +13,7 @@ end
 desc "Start GraphQL server"
 task :server do
   puts "Starting GraphQL server ->"
-  sh "docker-compose up api"
+  sh "docker-compose up api redis-server"
 end
 
 desc "Launch React Native client"
