@@ -1,14 +1,6 @@
 import gql from 'graphql-tag';
 
-export const emptyQuery = gql`
-query {
-    gauge(id: "0") {
-        siteName
-    }
-}
-`;
-
-export const fetchRWD = gql`
+export default gql`
 query FetchRWDAndGauge($lat: Float!, $lng: Float!) {
     rwd(lat: $lat, lng: $lng) {
         inputPoint {

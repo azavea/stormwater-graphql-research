@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import { GeoJSON, Map } from 'react-leaflet';
-import { Query } from 'react-apollo';
-
-import {
-    fetchRWD,
-    emptyQuery,
-} from '../queries';
+import { Map } from 'react-leaflet';
 
 import {
     cityHallCoordinates,
@@ -14,6 +8,7 @@ import {
 
 import ReactLeafletEsriTiledMapLayer from './ReactLeafletEsriTiledMapLayer';
 import SelectPointControl from './SelectPointControl';
+import RWDPolygon from './RWDPolygon';
 
 export default class ReactLeafletMap extends Component {
     constructor(props) {
@@ -22,10 +17,12 @@ export default class ReactLeafletMap extends Component {
             lat: null,
             lng: null,
             selectPointMode: false,
+            fetching: false,
         };
 
         this.handleMapClick = this.handleMapClick.bind(this);
         this.toggleSelectPointMode = this.toggleSelectPointMode.bind(this);
+        this.stopFetching = this.stopFetching.bind(this);
     }
 
     handleMapClick({ latlng }) {
@@ -34,6 +31,7 @@ export default class ReactLeafletMap extends Component {
                 ...state,
                 ...latlng,
                 selectPointMode: false,
+                fetching: true,
             }))
             : null;
     }
@@ -45,69 +43,41 @@ export default class ReactLeafletMap extends Component {
         }));
     }
 
+    stopFetching() {
+        return this.setState(state => ({
+            ...state,
+            fetching: false,
+        }));
+    }
+
     render() {
         const {
             lat,
             lng,
             selectPointMode,
+            fetching,
         } = this.state;
 
         return (
-            <Query
-                query={(lat && lng) ? fetchRWD : emptyQuery}
-                variables={{
-                    lat,
-                    lng,
-                }}
+            <Map
+                center={cityHallCoordinates}
+                zoom={initialMapZoom}
+                id="react-leaflet-map"
+                onClick={this.handleMapClick}
             >
-                {
-                    ({ loading, error, data }) => {
-                        const watershed = (() => {
-                            if (loading || error) {
-                                return null;
-                            }
-
-                            const {
-                                rwd: {
-                                    watershed: {
-                                        geometry,
-                                    } = {},
-                                } = {},
-                            } = data;
-
-                            return geometry && (
-                                <GeoJSON
-                                    data={geometry}
-                                    style={() => ({
-                                        color: 'orange',
-                                        weight: 3,
-                                        fillColor: 'orange',
-                                        fillOpacity: 1,
-                                    })}
-                                />
-                            );
-                        })();
-
-                        return (
-                            <Map
-                                center={cityHallCoordinates}
-                                zoom={initialMapZoom}
-                                id="react-leaflet-map"
-                                onClick={!loading ? this.handleMapClick : null}
-                            >
-                                <ReactLeafletEsriTiledMapLayer />
-                                <SelectPointControl
-                                    position="topleft"
-                                    loading={loading}
-                                    selectPointMode={selectPointMode}
-                                    toggleSelectPointMode={this.toggleSelectPointMode}
-                                />
-                                {watershed}
-                            </Map>
-                        );
-                    }
-                }
-            </Query>
+                <ReactLeafletEsriTiledMapLayer />
+                <SelectPointControl
+                    loading={fetching}
+                    position="topleft"
+                    selectPointMode={selectPointMode}
+                    toggleSelectPointMode={this.toggleSelectPointMode}
+                />
+                <RWDPolygon
+                    lat={lat}
+                    lng={lng}
+                    stopFetching={this.stopFetching}
+                />
+            </Map>
         );
     }
 }
