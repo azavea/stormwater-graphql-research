@@ -1,60 +1,65 @@
 import React from 'react';
-import { object } from 'prop-types';
-import { Map, TileLayer } from 'react-leaflet';
-import { graphql } from 'react-apollo';
+import { GeoJSON, Map } from 'react-leaflet';
+import { Query } from 'react-apollo';
 
 import fetchRWDAndRiverGauge from '../queries';
 
 import {
-    basemapTilesUrl,
-    basemapAttribution,
-    basemapMaxZoom,
     cityHallCoordinates,
     initialMapZoom,
 } from '../constants';
 
-function ReactLeafletMap({
-    data: {
-        loading,
-        rwd,
-        gauge,
-    },
-}) {
-    window.console.log('loading ->', loading);
-    window.console.log('rwd -> ', rwd);
-    window.console.log('gauge ->', gauge);
+import ReactLeafletEsriTiledMapLayer from './ReactLeafletEsriTiledMapLayer';
 
-    const currentBaseMap = (
-        <TileLayer
-            url={basemapTilesUrl}
-            attribution={basemapAttribution}
-            maxZoom={basemapMaxZoom}
-        />);
-
+export default function ReactLeafletMap() {
     return (
-        <Map
-            center={cityHallCoordinates}
-            zoom={initialMapZoom}
-            id="react-leaflet-map"
+        <Query
+            query={fetchRWDAndRiverGauge}
+            variables={{
+                lat: 39.965,
+                lng: -75.1806771,
+            }}
         >
-            {currentBaseMap}
-        </Map>
+            {
+                ({ loading, error, data }) => {
+                    const watershed = (() => {
+                        if (loading || error) {
+                            return null;
+                        }
+
+                        const {
+                            rwd: {
+                                watershed: {
+                                    geometry,
+                                },
+                            },
+                        } = data;
+
+                        return (
+                            <GeoJSON
+                                data={geometry}
+                                style={() => ({
+                                    color: 'orange',
+                                    weight: 3,
+                                    fillColor: 'orange',
+                                    fillOpacity: 1,
+                                })}
+                            />
+                        );
+                    })();
+
+                    return (
+                        <Map
+                            center={cityHallCoordinates}
+                            zoom={initialMapZoom}
+                            id="react-leaflet-map"
+                        >
+                            <ReactLeafletEsriTiledMapLayer />
+                            {watershed}
+                        </Map>
+                    );
+                }
+            }
+        </Query>
     );
 }
-
-ReactLeafletMap.defaultProps = {
-    data: {},
-};
-
-ReactLeafletMap.propTypes = {
-    data: object, // eslint-disable-line react/forbid-prop-types
-};
-
-export default graphql(fetchRWDAndRiverGauge, {
-    options: () => ({
-        variables: {
-            lat: 39.67185,
-            lng: -75.7674262,
-        },
-    }),
-})(ReactLeafletMap);
