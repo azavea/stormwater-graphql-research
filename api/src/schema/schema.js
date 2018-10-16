@@ -18,6 +18,11 @@ const {
     resolveRWDWatershed,
 } = require('./types/rwdWatershedType');
 
+const {
+    ParcelType,
+    resolveParcelFromLatLng,
+} = require('./types/parcelType');
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -69,6 +74,31 @@ const RootQuery = new GraphQLObjectType({
                 }
 
                 return resolveRWDWatershed(lat, lng);
+            },
+        },
+        parcel: {
+            type: ParcelType,
+            description: 'Parcel data',
+            args: {
+                address: {
+                    type: GraphQLString,
+                    description: 'Parcel address',
+                },
+                lat: {
+                    type: GraphQLFloat,
+                    description: 'Latitude for a point',
+                },
+                lng: {
+                    type: GraphQLFloat,
+                    description: 'Longitude for a point',
+                },
+            },
+            resolve(_, { lat, lng }) {
+                if (!lat || !lng) {
+                    return null;
+                }
+
+                return resolveParcelFromLatLng(lat, lng);
             },
         },
     },

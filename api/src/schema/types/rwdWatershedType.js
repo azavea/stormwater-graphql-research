@@ -3,6 +3,8 @@ const graphql = require('graphql');
 const axios = require('axios');
 const redis = require('redis');
 
+const { roundCoordinate } = require('../../utils');
+
 const redisClient = redis.createClient({
     host: 'redis-server',
 });
@@ -150,12 +152,6 @@ async function retrieveRWDResult(lat, lng) {
         inputPoint,
         watershed,
     };
-}
-
-function roundCoordinate(coord) {
-    return Number
-        .parseFloat(coord)
-        .toPrecision(8);
 }
 
 async function resolveRWDWatershed(inputLat, inputLng) {
