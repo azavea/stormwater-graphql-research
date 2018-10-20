@@ -37,7 +37,7 @@ export default function ParcelPolygon({
                             data={geometry}
                             style={() => ({
                                 color: 'blue',
-                                weight: 1,
+                                weight: 5,
                                 fillOpacity: 0,
                             })}
                         />

@@ -80,10 +80,6 @@ const RootQuery = new GraphQLObjectType({
             type: ParcelType,
             description: 'Parcel data',
             args: {
-                address: {
-                    type: GraphQLString,
-                    description: 'Parcel address',
-                },
                 lat: {
                     type: GraphQLFloat,
                     description: 'Latitude for a point',
