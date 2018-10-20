@@ -76,4 +76,5 @@ module.exports = {
     PointLocationType,
     RWDPointType,
     RWDPolygonType,
+    PolygonGeometryType,
 };

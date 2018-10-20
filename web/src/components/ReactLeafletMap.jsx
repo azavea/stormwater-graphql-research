@@ -4,11 +4,17 @@ import { Map } from 'react-leaflet';
 import {
     cityHallCoordinates,
     initialMapZoom,
+    queryModeEnum,
+    controlPositionsEnum,
 } from '../constants';
 
 import ReactLeafletEsriTiledMapLayer from './ReactLeafletEsriTiledMapLayer';
 import SelectPointControl from './SelectPointControl';
+import ToggleRWDParcelModeControl from './ToggleRWDParcelModeControl';
 import RWDPolygon from './RWDPolygon';
+import ParcelPolygon from './ParcelPolygon';
+
+const REACT_LEAFLET_MAP_ID = 'react-leaflet-map';
 
 export default class ReactLeafletMap extends Component {
     constructor(props) {
@@ -18,11 +24,13 @@ export default class ReactLeafletMap extends Component {
             lng: null,
             selectPointMode: false,
             fetching: false,
+            queryMode: queryModeEnum.RWD,
         };
 
         this.handleMapClick = this.handleMapClick.bind(this);
         this.toggleSelectPointMode = this.toggleSelectPointMode.bind(this);
         this.stopFetching = this.stopFetching.bind(this);
+        this.toggleRWDParcelMode = this.toggleRWDParcelMode.bind(this);
     }
 
     handleMapClick({ latlng }) {
@@ -37,9 +45,28 @@ export default class ReactLeafletMap extends Component {
     }
 
     toggleSelectPointMode() {
+        return this.setState(
+            state => ({
+                ...state,
+                selectPointMode: !state.selectPointMode,
+            }),
+            () => {
+                document
+                    .getElementById(REACT_LEAFLET_MAP_ID)
+                    .style
+                    .cursor = this.state.selectPointMode
+                        ? 'pointer'
+                        : null;
+            },
+        );
+    }
+
+    toggleRWDParcelMode() {
         return this.setState(state => ({
             ...state,
-            selectPointMode: !state.selectPointMode,
+            queryMode: state.queryMode === queryModeEnum.RWD
+                ? queryModeEnum.Parcel
+                : queryModeEnum.RWD,
         }));
     }
 
@@ -56,27 +83,45 @@ export default class ReactLeafletMap extends Component {
             lng,
             selectPointMode,
             fetching,
+            queryMode,
         } = this.state;
+
+        const polygon = queryMode === queryModeEnum.RWD
+            ? (
+                <RWDPolygon
+                    lat={lat}
+                    lng={lng}
+                    stopFetching={this.stopFetching}
+                />)
+            : (
+                <ParcelPolygon
+                    lat={lat}
+                    lng={lng}
+                    stopFetching={this.stopFetching}
+                />
+            );
 
         return (
             <Map
                 center={cityHallCoordinates}
                 zoom={initialMapZoom}
-                id="react-leaflet-map"
+                id={REACT_LEAFLET_MAP_ID}
                 onClick={this.handleMapClick}
             >
                 <ReactLeafletEsriTiledMapLayer />
+                <ToggleRWDParcelModeControl
+                    loading={fetching}
+                    position={controlPositionsEnum.topleft}
+                    mode={queryMode}
+                    toggleRWDParcelMode={this.toggleRWDParcelMode}
+                />
                 <SelectPointControl
                     loading={fetching}
-                    position="topleft"
+                    position={controlPositionsEnum.topleft}
                     selectPointMode={selectPointMode}
                     toggleSelectPointMode={this.toggleSelectPointMode}
                 />
-                <RWDPolygon
-                    lat={lat}
-                    lng={lng}
-                    stopFetching={this.stopFetching}
-                />
+                {polygon}
             </Map>
         );
     }

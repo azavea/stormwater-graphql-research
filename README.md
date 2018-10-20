@@ -36,13 +36,14 @@ rake mobile
 
 ## Rake Tasks
 
-| Task | Description |
-| ---- | ----------- |
-| build | Create GraphQL service & install client dependencies |
-| server | Start GraphQL server |
-| mobile | Start React Native app using Expo |
-| web | Start React web app using Webpack Dev Server |
-| start | Start both GraphQL server and React web app |
+| Task   | Description                                          |
+| ----   | -----------                                          |
+| build  | Create GraphQL service & install client dependencies |
+| server | Start GraphQL server                                 |
+| mobile | Start React Native app using Expo                    |
+| web    | Start React web app using Webpack Dev Server         |
+| start  | Start both GraphQL server and React web app          |
+| flush  | Flush Redis cache                                    |
 
 ## License
 

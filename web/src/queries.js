@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
-export default gql`
-query FetchRWDAndGauge($lat: Float!, $lng: Float!) {
+export const fetchRWD = gql`
+query FetchRWD($lat: Float!, $lng: Float!) {
     rwd(lat: $lat, lng: $lng) {
         inputPoint {
             geometry {
@@ -16,14 +16,16 @@ query FetchRWDAndGauge($lat: Float!, $lng: Float!) {
             }
         }
     }
-    gauge(lat: $lat, lng: $lng) {
-        location {
-            lat
-            lng
+}
+`;
+
+export const fetchParcel = gql`
+query FetchParcel($lat: Float!, $lng: Float!) {
+    parcel(lat: $lat, lng: $lng) {
+        geometry {
+            type
+            coordinates
         }
-        siteName
-        url
-        variables
     }
 }
 `;

@@ -29,3 +29,8 @@ export const controlPositionsEnum = {
     bottomright: 'bottomright',
     bottomleft: 'bottomleft',
 };
+
+export const queryModeEnum = {
+    RWD: 'RWD',
+    Parcel: 'Parcel',
+};
