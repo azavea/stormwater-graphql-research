@@ -35,3 +35,9 @@ task :start do
   puts "Starting GraphQL server & web client ->"
   sh "docker-compose up"
 end
+
+desc "Flush Redis cache"
+task :flush do
+    puts "Flushing Redis cache ->"
+    sh "docker-compose exec redis-server redis-cli flushall"
+end
