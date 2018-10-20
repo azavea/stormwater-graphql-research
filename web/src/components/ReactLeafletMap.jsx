@@ -14,6 +14,8 @@ import ToggleRWDParcelModeControl from './ToggleRWDParcelModeControl';
 import RWDPolygon from './RWDPolygon';
 import ParcelPolygon from './ParcelPolygon';
 
+const REACT_LEAFLET_MAP_ID = 'react-leaflet-map';
+
 export default class ReactLeafletMap extends Component {
     constructor(props) {
         super(props);
@@ -43,10 +45,20 @@ export default class ReactLeafletMap extends Component {
     }
 
     toggleSelectPointMode() {
-        return this.setState(state => ({
-            ...state,
-            selectPointMode: !state.selectPointMode,
-        }));
+        return this.setState(
+            state => ({
+                ...state,
+                selectPointMode: !state.selectPointMode,
+            }),
+            () => {
+                document
+                    .getElementById(REACT_LEAFLET_MAP_ID)
+                    .style
+                    .cursor = this.state.selectPointMode
+                        ? 'pointer'
+                        : null;
+            },
+        );
     }
 
     toggleRWDParcelMode() {
@@ -93,7 +105,7 @@ export default class ReactLeafletMap extends Component {
             <Map
                 center={cityHallCoordinates}
                 zoom={initialMapZoom}
-                id="react-leaflet-map"
+                id={REACT_LEAFLET_MAP_ID}
                 onClick={this.handleMapClick}
             >
                 <ReactLeafletEsriTiledMapLayer />
