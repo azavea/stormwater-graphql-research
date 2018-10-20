@@ -3,16 +3,16 @@ import { Query } from 'react-apollo';
 import { GeoJSON } from 'react-leaflet';
 import { number, func } from 'prop-types';
 
-import { fetchRWD } from '../queries';
+import { fetchParcel } from '../queries';
 
-export default function RWDPolygon({
+export default function ParcelPolygon({
     lat,
     lng,
     stopFetching,
 }) {
     return (
         <Query
-            query={fetchRWD}
+            query={fetchParcel}
             variables={{
                 lat,
                 lng,
@@ -27,10 +27,8 @@ export default function RWDPolygon({
                     }
 
                     const {
-                        rwd: {
-                            watershed: {
-                                geometry,
-                            } = {},
+                        parcel: {
+                            geometry,
                         } = {},
                     } = data;
 
@@ -38,10 +36,9 @@ export default function RWDPolygon({
                         <GeoJSON
                             data={geometry}
                             style={() => ({
-                                color: 'orange',
-                                weight: 3,
-                                fillColor: 'orange',
-                                fillOpacity: 1,
+                                color: 'blue',
+                                weight: 1,
+                                fillOpacity: 0,
                             })}
                         />
                     );
@@ -51,13 +48,13 @@ export default function RWDPolygon({
     );
 }
 
-RWDPolygon.defaultProps = {
+ParcelPolygon.defaultProps = {
     lat: null,
     lng: null,
     stopFetching: () => null,
 };
 
-RWDPolygon.propTypes = {
+ParcelPolygon.propTypes = {
     lat: number,
     lng: number,
     stopFetching: func,

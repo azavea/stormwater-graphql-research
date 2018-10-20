@@ -57,9 +57,9 @@ const ParcelType = new GraphQLObjectType({
             type: GraphQLFloat,
             description: 'Parcel centroid longitude',
         },
-        shape: {
+        geometry: {
             type: PolygonGeometryType,
-            description: 'Parcel shape GeoJSON',
+            description: 'Parcel geometry GeoJSON',
         },
     },
 });
@@ -124,7 +124,7 @@ function reformatParcelResult([result]) {
         grossArea,
         impervArea,
         bldgType,
-        shape: parseWKT(shape),
+        geometry: parseWKT(shape),
         area,
         lat,
         lng,
