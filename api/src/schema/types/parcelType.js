@@ -2,8 +2,11 @@ const { promisify } = require('util');
 const axios = require('axios');
 const graphql = require('graphql');
 const redis = require('redis');
+const parseWKT = require('wellknown');
 
 const { roundCoordinate } = require('../../utils');
+
+const { PolygonGeometryType } = require('./geometryTypes');
 
 const redisClient = redis.createClient({
     host: 'redis-server',
@@ -55,8 +58,8 @@ const ParcelType = new GraphQLObjectType({
             description: 'Parcel centroid longitude',
         },
         shape: {
-            type: GraphQLString,
-            description: 'Parcel shape well known text',
+            type: PolygonGeometryType,
+            description: 'Parcel shape GeoJSON',
         },
     },
 });
@@ -121,7 +124,7 @@ function reformatParcelResult([result]) {
         grossArea,
         impervArea,
         bldgType,
-        shape,
+        shape: parseWKT(shape),
         area,
         lat,
         lng,
