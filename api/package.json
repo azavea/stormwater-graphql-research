@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "lint": "node_modules/.bin/eslint --color -c .eslintrc — ext .js src",
+    "lint": "node_modules/.bin/eslint --color -c .eslintrc src/",
     "dev-server": "node_modules/.bin/nodemon ./src/server.js",
     "watch:lint": "node node_modules/eslint-watch/bin/esw -w",
     "start": "node_modules/.bin/concurrently --kill-others --raw \"npm run watch:lint\" \"npm run dev-server\"",
