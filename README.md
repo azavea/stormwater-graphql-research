@@ -12,9 +12,23 @@ for viewing stormwater information.
 
 ## Setup
 
+To build the containers, run
+
 ```
 rake build
 ```
+
+To run the GraphQL server you'll also need to configure a `server.env` file with
+key/value pairs for the following environment variables:
+
+| Environement Variable   | Description                                   |
+| ---                     | ---                                           |
+| `RWD_AUTH_URL`          | URL for RWD authorization key server          |
+| `RWD_AUTH_TOKEN`        | Token for RWD authoization key server         |
+| `PARCEL_AUTH_URL`       | URL for parcel authorization key server       |
+| `PARCEL_AUTH_TOKEN`     | Token for parcel authorization key server     |
+| `IMPERVIOUS_AUTH_URL`   | URL for impervious authorization key server   |
+| `IMPERVIOUS_AUTH_TOKEN` | Token for impervious authorization key server |
 
 ## Server
 
