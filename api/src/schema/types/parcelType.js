@@ -1,19 +1,14 @@
-const { promisify } = require('util');
 const axios = require('axios');
 const graphql = require('graphql');
-const redis = require('redis');
 const parseWKT = require('wellknown');
 
-const { roundCoordinate } = require('../../utils');
+const {
+    roundCoordinate,
+    redisClient,
+    redisClientGet,
+} = require('../../utils');
 
 const { PolygonGeometryType } = require('./geometryTypes');
-
-const redisClient = redis.createClient({
-    host: 'redis-server',
-});
-
-const redisClientGet = promisify(redisClient.get)
-    .bind(redisClient);
 
 const {
     GraphQLObjectType,

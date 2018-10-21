@@ -23,6 +23,11 @@ const {
     resolveParcelFromLatLng,
 } = require('./types/parcelType');
 
+const {
+    ImperviousType,
+    resolveImperviousFromLatLng,
+} = require('./types/imperviousType');
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -69,11 +74,9 @@ const RootQuery = new GraphQLObjectType({
                 },
             },
             resolve(_, { lat, lng }) {
-                if (!lat || !lng) {
-                    return null;
-                }
-
-                return resolveRWDWatershed(lat, lng);
+                return (lat && lng)
+                    ? resolveRWDWatershed(lat, lng)
+                    : null;
             },
         },
         parcel: {
@@ -90,11 +93,28 @@ const RootQuery = new GraphQLObjectType({
                 },
             },
             resolve(_, { lat, lng }) {
-                if (!lat || !lng) {
-                    return null;
-                }
-
-                return resolveParcelFromLatLng(lat, lng);
+                return (lat && lng)
+                    ? resolveParcelFromLatLng(lat, lng)
+                    : null;
+            },
+        },
+        impervious: {
+            type: ImperviousType,
+            description: 'Impervious and streets layer data',
+            args: {
+                lat: {
+                    type: GraphQLFloat,
+                    description: 'Latitude for a point',
+                },
+                lng: {
+                    type: GraphQLFloat,
+                    description: 'Longitude for a point',
+                },
+            },
+            resolve(_, { lat, lng }) {
+                return (lat && lng)
+                    ? resolveImperviousFromLatLng(lat, lng)
+                    : null;
             },
         },
     },
