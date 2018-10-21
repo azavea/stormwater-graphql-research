@@ -1,7 +1,9 @@
 # stormwater-graphql-research
 
-A research project to implement a GraphQL service and a React Native application
-for viewing stormwater information.
+[![Build Status](https://travis-ci.org/azavea/stormwater-graphql-research.svg?branch=develop)](https://travis-ci.org/azavea/stormwater-graphql-research)
+
+A research project to implement a GraphQL service + React Native & web
+applications for viewing stormwater information.
 
 ## Requirements
 
