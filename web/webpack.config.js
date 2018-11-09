@@ -73,17 +73,15 @@ module.exports = ({ production }) => {
                     loader: 'babel-loader',
                     options:
                     {
-                        presets: ['env', 'react'],
-                        plugins: [
-                            'syntax-dynamic-import',
-                            'transform-object-rest-spread',
-                            'transform-class-properties',
+                        presets: [
+                            '@babel/preset-env',
+                            '@babel/preset-react',
                         ],
-                        env: !!production ? {} : {
-                            development: {
-                                presets: ['react-hmre'],
-                            },
-                        },
+                        plugins: [
+                            'react-hot-loader/babel',
+                            '@babel/plugin-syntax-dynamic-import',
+                            '@babel/plugin-syntax-object-rest-spread',
+                        ],
                     },
                 },
                 {
@@ -153,12 +151,14 @@ module.exports = ({ production }) => {
             ignored: /node_modules/,
         },
         devServer: {
-            historyApiFallback: {
-                index: '/',
+            hot: true,
+            watchOptions: {
+                poll: 1000,
+                ignored: /node_modules/,
             },
             disableHostCheck: true,
             host: '0.0.0.0',
-            overlay: false,
+            clientLogLevel: 'warning',
         },
         resolve: {
             extensions: ['.mjs', '.js', '.jsx'],
