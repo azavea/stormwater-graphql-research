@@ -5,32 +5,23 @@ import { ApolloProvider } from 'react-apollo';
 
 import {
     BrowserRouter,
-    Route,
 } from 'react-router-dom';
 
 import '../static/main.scss';
 import registerServiceWorker from './registerServiceWorker';
 
-import Home from './components/Home';
+import App from './App';
 
 const client = new ApolloClient({
-    uri: 'http://localhost:9991/',
+    uri: 'graphql/',
 });
 
-export default function App() {
-    return (
-        <ApolloProvider client={client}>
-            <BrowserRouter>
-                <div>
-                    <Route component={Home} />
-                </div>
-            </BrowserRouter>
-        </ApolloProvider>
-    );
-}
-
 render(
-    <App />,
+    <ApolloProvider client={client}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </ApolloProvider>,
     document.getElementById('mount'),
 );
 

@@ -6,6 +6,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 const APP_NAME = 'react-leaflet-sandbox';
+const apiHostname = 'http://api.internal:9991';
 
 module.exports = ({ production }) => {
     const environmentPlugins = !!production ? [
@@ -159,6 +160,12 @@ module.exports = ({ production }) => {
             disableHostCheck: true,
             host: '0.0.0.0',
             clientLogLevel: 'warning',
+            proxy: {
+                '/graphql/*': {
+                    target: apiHostname,
+                    pathRewrite: {'^/graphl/': ''}
+                },
+            },
         },
         resolve: {
             extensions: ['.mjs', '.js', '.jsx'],

@@ -18,6 +18,8 @@ services:
   web:
     build: ./web
     working_dir: /usr/src/web
+    links:
+      - api:api.internal
     volumes:
       - ./web:/usr/src/web
       - /usr/src/web/node_modules

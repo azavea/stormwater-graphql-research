@@ -4,10 +4,9 @@
 }
 
 #react-leaflet-map {
-    height: 100vh;
+    height: calc(100vh - 50px);
     position: fixed;
     right: 0;
     left: 0;
     bottom: 0;
 }
-

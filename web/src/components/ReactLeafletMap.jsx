@@ -1,84 +1,99 @@
-import React, { useState } from 'react';
-import { Map } from 'react-leaflet';
+import React, { Suspense, lazy } from 'react';
+import { arrayOf, func, number } from 'prop-types';
+
+import {
+    Map as RLMap,
+    CircleMarker,
+    Pane,
+} from 'react-leaflet';
 
 import {
     cityHallCoordinates,
     initialMapZoom,
     queryModeEnum,
+    REACT_LEAFLET_MAP_ID,
+    pointsPaneZIndex,
+    parcelPaneZIndex,
+    rwdPaneZIndex,
+    clickedPointStyle,
     controlPositionsEnum,
+    basemapMaxZoom,
 } from '../constants';
 
 import ReactLeafletEsriTiledMapLayer from './ReactLeafletEsriTiledMapLayer';
-import SelectPointControl from './SelectPointControl';
-import ToggleRWDParcelModeControl from './ToggleRWDParcelModeControl';
-import RWDPolygon from './RWDPolygon';
-import ParcelPolygon from './ParcelPolygon';
 
-const REACT_LEAFLET_MAP_ID = 'react-leaflet-map';
+const Control = lazy(() => import('react-leaflet-control'));
+const RWDPolygon = lazy(() => import('./RWDPolygon'));
+const ParcelPolygon = lazy(() => import('./ParcelPolygon'));
+const ImperviousData = lazy(() => import('./ImperviousData'));
 
-export default function ReactLeafletMap() {
-    const [selectPointMode, setSelectPointMode] = useState(false);
-    const [fetching, setFetching] = useState(false);
-    const [queryMode, setQueryMode] = useState(queryModeEnum.RWD);
-    const [lat, setLat] = useState(null);
-    const [lng, setLng] = useState(null);
+export default function ReactLeafletMap({
+    mode,
+    lat,
+    lng,
+    handleSelectPoint,
+}) {
+    const clickedPoint = (lat && lng) && (
+        <CircleMarker
+            center={[lat, lng]}
+            radius={5}
+            color={clickedPointStyle.color}
+            fillColor={clickedPointStyle.color}
+            fillOpacity={1}
+        />);
 
-    const stopFetching = () => setFetching(false);
-    const toggleSelectPointMode = () => setSelectPointMode(!selectPointMode);
-
-    const toggleRWDParcelMode = queryMode === queryModeEnum.RWD
-        ? () => setQueryMode(queryModeEnum.Parcel)
-        : () => setQueryMode(queryModeEnum.RWD);
-
-    const handleMapClick = ({ latlng }) => {
-        if (!selectPointMode) {
-            return null;
-        }
-
-        setFetching(true);
-        setSelectPointMode(false);
-        setLat(latlng.lat);
-        setLng(latlng.lng);
-
-        return null;
-    };
-
-    const polygon = queryMode === queryModeEnum.RWD
-        ? (
+    const rwdPolygon = mode.includes(queryModeEnum.RWD) && (
+        <Suspense fallback={null}>
             <RWDPolygon
                 lat={lat}
                 lng={lng}
-                stopFetching={stopFetching}
-            />)
-        : (
+            />
+        </Suspense>);
+
+    const parcelPolygon = mode.includes(queryModeEnum.Parcel) && (
+        <Suspense fallback={null}>
             <ParcelPolygon
                 lat={lat}
                 lng={lng}
-                stopFetching={stopFetching}
             />
-        );
+        </Suspense>);
+
+    const imperviousData = mode.includes(queryModeEnum.Impervious) && (
+        <Suspense fallback={null}>
+            <Control position={controlPositionsEnum.bottomleft}>
+                <ImperviousData
+                    lat={lat}
+                    lng={lng}
+                />
+            </Control>
+        </Suspense>);
 
     return (
-        <Map
+        <RLMap
             center={cityHallCoordinates}
             zoom={initialMapZoom}
+            maxZoom={basemapMaxZoom}
             id={REACT_LEAFLET_MAP_ID}
-            onClick={handleMapClick}
+            onClick={handleSelectPoint}
         >
             <ReactLeafletEsriTiledMapLayer />
-            <ToggleRWDParcelModeControl
-                loading={fetching}
-                position={controlPositionsEnum.topleft}
-                mode={queryMode}
-                toggleRWDParcelMode={toggleRWDParcelMode}
-            />
-            <SelectPointControl
-                loading={fetching}
-                position={controlPositionsEnum.topleft}
-                selectPointMode={selectPointMode}
-                toggleSelectPointMode={toggleSelectPointMode}
-            />
-            {polygon}
-        </Map>
+            {imperviousData}
+            <Pane style={{ zIndex: rwdPaneZIndex }}>
+                {rwdPolygon}
+            </Pane>
+            <Pane style={{ zIndex: parcelPaneZIndex }}>
+                {parcelPolygon}
+            </Pane>
+            <Pane style={{ zIndex: pointsPaneZIndex }}>
+                {clickedPoint}
+            </Pane>
+        </RLMap>
     );
 }
+
+ReactLeafletMap.propTypes = {
+    mode: arrayOf(Object.values(queryModeEnum)).isRequired,
+    handleSelectPoint: func.isRequired,
+    lat: number.isRequired,
+    lng: number.isRequired,
+};

@@ -29,3 +29,13 @@ query FetchParcel($lat: Float!, $lng: Float!) {
     }
 }
 `;
+
+export const fetchImpervious = gql`
+query FetchImpervious($lat: Float!, $lng: Float!) {
+    impervious(lat: $lat, lng: $lng) {
+        impervious
+        curb
+        street
+    }
+}
+`;

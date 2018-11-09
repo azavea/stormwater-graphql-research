@@ -4,6 +4,7 @@ import { GeoJSON } from 'react-leaflet';
 import { number, func } from 'prop-types';
 
 import { fetchParcel } from '../queries';
+import { parcelPolygonStyle } from '../constants';
 
 export default function ParcelPolygon({
     lat,
@@ -26,20 +27,12 @@ export default function ParcelPolygon({
                         return null;
                     }
 
-                    const {
-                        parcel: {
-                            geometry,
-                        } = {},
-                    } = data;
+                    const { parcel } = data;
 
-                    return geometry && (
+                    return parcel && parcel.geometry && (
                         <GeoJSON
-                            data={geometry}
-                            style={() => ({
-                                color: 'blue',
-                                weight: 5,
-                                fillOpacity: 0,
-                            })}
+                            data={parcel.geometry}
+                            style={parcelPolygonStyle}
                         />
                     );
                 }

@@ -32,21 +32,21 @@ const ImperviousType = new GraphQLObjectType({
 });
 
 async function getLayerURLs() {
-    const imperviousCacheKey = 'IMPERVIOUS_LAYER_URL';
-    const streetsCacheKey = 'STREETS_LAYER_URL';
-    const curbsCacheKey = 'CURBS_LAYER_URL';
+    // const imperviousCacheKey = 'IMPERVIOUS_LAYER_URL';
+    // const streetsCacheKey = 'STREETS_LAYER_URL';
+    // const curbsCacheKey = 'CURBS_LAYER_URL';
 
-    const cachedImperviousURL = await redisClientGet(imperviousCacheKey);
-    const cachedStreetsURL = await redisClientGet(streetsCacheKey);
-    const cachedCurbsURL = await redisClientGet(curbsCacheKey);
+    // const cachedImperviousURL = await redisClientGet(imperviousCacheKey);
+    // const cachedStreetsURL = await redisClientGet(streetsCacheKey);
+    // const cachedCurbsURL = await redisClientGet(curbsCacheKey);
 
-    if (cachedImperviousURL && cachedStreetsURL && cachedCurbsURL) {
-        return {
-            imperviousURL: cachedImperviousURL,
-            streetsURL: cachedStreetsURL,
-            curlsURL: cachedCurbsURL,
-        };
-    }
+    // if (cachedImperviousURL && cachedStreetsURL && cachedCurbsURL) {
+    //     return {
+    //         imperviousURL: cachedImperviousURL,
+    //         streetsURL: cachedStreetsURL,
+    //         curlsURL: cachedCurbsURL,
+    //     };
+    // }
 
     const {
         data: {
@@ -62,9 +62,9 @@ async function getLayerURLs() {
             },
         );
 
-    redisClient.set(imperviousCacheKey, imperviousURL);
-    redisClient.set(streetsCacheKey, streetsURL);
-    redisClient.set(curbsCacheKey, curbsURL);
+    // redisClient.set(imperviousCacheKey, imperviousURL);
+    // redisClient.set(streetsCacheKey, streetsURL);
+    // redisClient.set(curbsCacheKey, curbsURL);
 
     return {
         imperviousURL,

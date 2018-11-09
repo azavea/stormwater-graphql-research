@@ -1,12 +1,15 @@
 import { string } from 'prop-types';
-import { MapLayer } from 'react-leaflet';
+import { MapLayer, withLeaflet } from 'react-leaflet';
 import esri from 'esri-leaflet';
 
-export default class ReactLeafletEsriTiledMapLayer extends MapLayer {
+import { basemapMaxZoom } from '../constants';
+
+class ReactLeafletEsriTiledMapLayer extends MapLayer {
     createLeafletElement(props) { // eslint-disable-line class-methods-use-this
         return esri.tiledMapLayer({
             url: props.url,
             attribution: props.attribution,
+            maxZoom: basemapMaxZoom,
         });
     }
 }
@@ -20,3 +23,5 @@ ReactLeafletEsriTiledMapLayer.propTypes = {
     url: string,
     attribution: string,
 };
+
+export default withLeaflet(ReactLeafletEsriTiledMapLayer);

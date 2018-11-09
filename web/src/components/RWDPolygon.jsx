@@ -4,6 +4,7 @@ import { GeoJSON } from 'react-leaflet';
 import { number, func } from 'prop-types';
 
 import { fetchRWD } from '../queries';
+import { rwdPolygonStyle } from '../constants';
 
 export default function RWDPolygon({
     lat,
@@ -37,12 +38,7 @@ export default function RWDPolygon({
                     return geometry && (
                         <GeoJSON
                             data={geometry}
-                            style={() => ({
-                                color: 'orange',
-                                weight: 3,
-                                fillColor: 'orange',
-                                fillOpacity: 1,
-                            })}
+                            style={rwdPolygonStyle}
                         />
                     );
                 }
