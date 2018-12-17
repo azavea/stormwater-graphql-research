@@ -1,25 +1,19 @@
 {
   "expo": {
-    "name": "react-native-boilerplate",
-    "description": "This project is really great.",
-    "slug": "react-native-boilerplate",
-    "privacy": "public",
-    "sdkVersion": "30.0.0",
-    "platforms": ["ios", "android"],
+    "name": "mobile",
+    "description": "No description",
+    "slug": "mobile",
+    "sdkVersion": "26.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "primaryColor": "#cccccc",
+    "privacy": "public",
+    "icon": "./assets/icons/app.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/icons/loading.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
     "ios": {
       "supportsTablet": true
     }

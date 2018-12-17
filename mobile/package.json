@@ -1,34 +1,14 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "lint": "./node_modules/.bin/eslint -c .eslintrc — ext .js src",
-    "watch:lint": "node node_modules/eslint-watch/bin/esw -w",
-    "exp:start": "expo-cli start",
-    "start": "concurrently --kill-others --raw \"npm run watch:lint\" \"npm run exp:start\""
-  },
+  "name": "mobile",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "main": "main.js",
   "dependencies": {
-    "apollo-boost": "0.1.16",
-    "axios": "0.18.0",
-    "babel-eslint": "8.2.6",
-    "babel-plugin-transform-inline-environment-variables": "0.3.0",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "concurrently": "3.5.1",
-    "eslint": "4.19.1",
-    "eslint-config-airbnb": "16.1.0",
-    "eslint-plugin-babel": "5.1.0",
-    "eslint-plugin-import": "2.10.0",
-    "eslint-plugin-jsx-a11y": "6.0.3",
-    "eslint-plugin-react": "7.7.0",
-    "eslint-watch": "3.1.4",
-    "expo": "30.0.0",
-    "graphql": "14.0.2",
-    "graphql-tag": "2.9.2",
-    "prop-types": "15.6.1",
-    "ramda": "0.25.0",
-    "react": "16.5.2",
-    "react-apollo": "2.1.11",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
-    "react-native-elements": "0.19.1",
-    "react-navigation": "2.11.2"
+    "expo": "^26.0.0",
+    "react": "16.3.0-alpha.1",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-26.0.0.tar.gz",
+    "create-react-class": "15.6.3"
   }
 }
