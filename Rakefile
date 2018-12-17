@@ -11,10 +11,6 @@ task :lint do
     puts "Linting project ->"
     sh "docker-compose run api npm run lint"
     sh "docker-compose run web npm run compile"
-    Dir.chdir("mobile") do
-        sh "npm install"
-        sh "npm run lint"
-    end
 end
 
 desc "Start GraphQL server"

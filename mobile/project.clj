@@ -8,6 +8,7 @@
                  [binaryage/oops "0.5.8"]
                            [reagent "0.7.0" :exclusions [cljsjs/react cljsjs/react-dom cljsjs/react-dom-server cljsjs/create-react-class]]
                            [re-frame "0.9.3"]
+                           [re-graph "0.1.6"]
                            [react-native-externs "0.1.0"]]
             :plugins [[lein-cljsbuild "1.1.4"]
                       [lein-figwheel "0.5.14"]]
