@@ -43,8 +43,8 @@
 (defn get-alias
   [ns]
   (apply merge
-    ((juxt :requires :require-macros)
-     (get-namespace ns))))
+         ((juxt :requires :require-macros)
+          (get-namespace ns))))
 
 (defn print-ast [ast]
   (pprint  ;; pprint indents output nicely
@@ -113,9 +113,9 @@
 
 (defn externs-for-interop [syms]
   (apply str
-    "var DummyClass={};\n"
-    (map #(str "DummyClass." % "=function(){};\n")
-      syms)))
+         "var DummyClass={};\n"
+         (map #(str "DummyClass." % "=function(){};\n")
+              syms)))
 
 (defn var-defined?
   "Returns true if the given fully-qualified symbol is known by the

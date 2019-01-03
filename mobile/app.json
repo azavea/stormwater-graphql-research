@@ -1,9 +1,9 @@
 {
   "expo": {
-    "name": "mobile",
+    "name": "mobile-graphql-client",
     "description": "No description",
-    "slug": "mobile",
-    "sdkVersion": "26.0.0",
+    "slug": "mobile-graphql-client",
+    "sdkVersion": "31.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "primaryColor": "#cccccc",

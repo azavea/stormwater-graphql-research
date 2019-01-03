@@ -1,6 +1,6 @@
 (ns ^:figwheel-no-load env.expo.main
   (:require [reagent.core :as r]
-            [mobile.core :as core]
+            [mobile-graphql-client.core :as core]
             [figwheel.client :as figwheel :include-macros true]
             [env.dev]))
 
