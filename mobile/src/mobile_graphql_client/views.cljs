@@ -1,7 +1,9 @@
 (ns mobile-graphql-client.views
   (:require [reagent.core :as r]
             [mobile-graphql-client.actions :as actions]
-            [mobile-graphql-client.store :as store]))
+            [mobile-graphql-client.store :as store]
+            [mobile-graphql-client.constants :as constants]
+            [mobile-graphql-client.react-native-map-view :as map-view]))
 
 (def ReactNative (js/require "react-native"))
 (def expo (js/require "expo"))
@@ -48,14 +50,19 @@
     [footer-tab-map-button]
     [footer-tab-settings-button]]])
 
-(defn main-screen
+(defn settings-screen-content
   []
   [view
    [text {:style text-style} @store/active-screen-cursor]])
 
+(defn main-screen-content
+  []
+  (cond
+    (= constants/map-screen @store/active-screen-cursor) [map-view/react-native-map-view]
+    :else [content {:content-container-style main-view-style}]))
+
 (defn main
   []
   [container
-   [content {:content-container-style main-view-style}
-    [main-screen]]
+   [main-screen-content]
    [footer-with-tabs]])
