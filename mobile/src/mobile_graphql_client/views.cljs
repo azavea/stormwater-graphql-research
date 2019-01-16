@@ -6,17 +6,19 @@
 (def ReactNative (js/require "react-native"))
 (def expo (js/require "expo"))
 (def AtExpo (js/require "@expo/vector-icons"))
-(def ionicons (.-Ionicons AtExpo))
-(def ic (r/adapt-react-class ionicons))
-(def ReactNativeElements (js/require "react-native-elements"))
+(def NativeBase (js/require "native-base"))
 
-(def text (r/adapt-react-class (.-Text ReactNative)))
-(def view (r/adapt-react-class (.-View ReactNative)))
-(def image (r/adapt-react-class (.-Image ReactNative)))
-(def button (r/adapt-react-class (.-Button ReactNativeElements)))
+(def view (r/adapt-react-class (.-View NativeBase)))
+(def text (r/adapt-react-class (.-Text NativeBase)))
+(def container (r/adapt-react-class (.-Container NativeBase)))
+(def header (r/adapt-react-class (.-Header NativeBase)))
+(def content (r/adapt-react-class (.-Content NativeBase)))
+(def footer (r/adapt-react-class (.-Footer NativeBase)))
+(def footer-tab (r/adapt-react-class (.-FooterTab NativeBase)))
+(def button (r/adapt-react-class (.-Button NativeBase)))
+(def icon (r/adapt-react-class (.-Icon NativeBase)))
 
 (def main-view-style {:flex 1
-                      :flex-direction "column"
                       :align-items "center"
                       :justify-content "center"})
 
@@ -25,12 +27,35 @@
                  :margin-bottom 20
                  :text-align "center"})
 
+(defn footer-tab-map-button
+  []
+  [button {:vertical true
+           :on-press actions/set-map-screen-active}
+   [icon {:name "map"}]
+   [text "Map"]])
+
+(defn footer-tab-settings-button
+  []
+  [button {:vertical true
+           :on-press actions/set-settings-screen-active}
+   [icon {:name "settings"}]
+   [text "Settings"]])
+
+(defn footer-with-tabs
+  []
+  [footer
+   [footer-tab
+    [footer-tab-map-button]
+    [footer-tab-settings-button]]])
+
+(defn main-screen
+  []
+  [view
+   [text {:style text-style} @store/active-screen-cursor]])
+
 (defn main
   []
-  [view {:style main-view-style}
-   [image {:source (js/require "./assets/images/cljs.png")
-           :style {:width 200
-                   :height 200}}]
-   [text {:style text-style} (str "Counter -> " @store/counter-cursor)]
-   [ic {:name "ios-arrow-down" :size 60 :color "green"}]
-   [button {:title "Increment" :on-press actions/increment-counter}]])
+  [container
+   [content {:content-container-style main-view-style}
+    [main-screen]]
+   [footer-with-tabs]])
