@@ -9,3 +9,7 @@
 (defn set-settings-screen-active
   []
   (reset! store/active-screen-cursor constants/settings-screen))
+
+(defn store-map-region
+  [region]
+  (reset! store/map-region-cursor (js->clj region)))
