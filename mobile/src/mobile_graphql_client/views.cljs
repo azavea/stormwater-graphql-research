@@ -33,15 +33,13 @@
   []
   [button {:vertical true
            :on-press actions/set-map-screen-active}
-   [icon {:name "map"}]
-   [text "Map"]])
+   [icon {:name "map"}]])
 
 (defn footer-tab-settings-button
   []
   [button {:vertical true
            :on-press actions/set-settings-screen-active}
-   [icon {:name "settings"}]
-   [text "Settings"]])
+   [icon {:name "settings"}]])
 
 (defn footer-with-tabs
   []

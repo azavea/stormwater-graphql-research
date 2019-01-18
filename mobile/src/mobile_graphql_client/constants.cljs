@@ -2,7 +2,7 @@
 
 (defonce map-screen "map-screen")
 (defonce settings-screen "settings-screen")
-(defonce initial-map-region {"latitude" 37.78825
-                             "longitude" -122.4324
-                             "latitudeDelta" 0.0922
-                             "longitudeDelta" 0.0421})
+(defonce initial-map-region {:latitude 39.9524
+                             :longitude -75.1636
+                             :latitudeDelta 0.0922
+                             :longitudeDelta 0.0421})
