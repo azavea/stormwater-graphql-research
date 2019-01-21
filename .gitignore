@@ -21,3 +21,10 @@ mobile/main.js
 mobile/.js-modules.edn
 mobile/env/dev/env/dev.cljs
 mobile/env/dev/env/index.cljs
+node_modules/**/*
+.expo/*
+npm-debug.*
+*.jks
+*.p12
+*.key
+*.mobileprovision

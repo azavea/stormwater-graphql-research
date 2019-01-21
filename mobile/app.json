@@ -1,19 +1,27 @@
 {
   "expo": {
-    "name": "mobile-graphql-client",
-    "description": "No description",
-    "slug": "mobile-graphql-client",
-    "sdkVersion": "31.0.0",
+    "name": "mobile",
+    "slug": "mobile",
+    "privacy": "public",
+    "sdkVersion": "32.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "primaryColor": "#cccccc",
-    "privacy": "public",
-    "icon": "./assets/icons/app.png",
+    "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/icons/loading.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     }

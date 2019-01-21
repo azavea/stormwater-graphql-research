@@ -1,19 +1,24 @@
 {
-  "name": "mobile-graphql-client",
-  "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
-  "main": "main.js",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
   "dependencies": {
-    "@expo/vector-icons": "8.1.0",
-    "create-react-class": "15.6.3",
-    "expo": "31.0.4",
-    "native-base": "2.10.0",
+    "apollo-boost": "0.1.27",
+    "expo": "32.0.0",
+    "graphql": "14.1.1",
+    "graphql-tag": "2.10.1",
     "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.1.tar.gz",
+    "react-apollo": "2.4.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-elements": "0.19.1",
-    "react-native-tabbar-bottom": "1.0.4",
-    "react-router-native": "4.3.0"
-  }
+    "react-navigation": "3.0.9"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "5.0.0"
+  },
+  "private": true
 }
